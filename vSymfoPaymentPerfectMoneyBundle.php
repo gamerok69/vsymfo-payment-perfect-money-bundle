@@ -13,7 +13,7 @@
 namespace vSymfo\Payment\PerfectMoneyBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use vSymfo\Payment\PerfectMoneyBundle\DependencyInjection\vSymfoPaymentEgopayExtension;
+use vSymfo\Payment\PerfectMoneyBundle\DependencyInjection\vSymfoPaymentPerfectMoneyExtension;
 
 /**
  * @author Rafał Mikołajun <rafal@vision-web.pl>
