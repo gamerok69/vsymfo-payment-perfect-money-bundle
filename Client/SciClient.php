@@ -72,26 +72,26 @@ class SciClient
             throw new \Exception('curl not found');
         }
 
-        if (!is_string($pmMemberId)) {
+        if (!is_scalar($pmMemberId)) {
             throw new \InvalidArgumentException('pmMemberId is not string');
         }
 
-        if (!is_string($pmPassword)) {
+        if (!is_scalar($pmPassword)) {
             throw new \InvalidArgumentException('pmPassword is not string');
         }
 
-        if (!is_string($alternatePhraseHash)) {
+        if (!is_scalar($alternatePhraseHash)) {
             throw new \InvalidArgumentException('alternatePhraseHash is not string');
         }
 
-        if (!is_string($payeeAccount)) {
+        if (!is_scalar($payeeAccount)) {
             throw new \InvalidArgumentException('payeeAccount is not string');
         }
 
-        $this->pmMemberId = $pmMemberId;
-        $this->pmPassword = $pmPassword;
-        $this->alternatePhraseHash = strtoupper(md5($alternatePhraseHash));
-        $this->payeeAccount = $payeeAccount;
+        $this->pmMemberId = (string)$pmMemberId;
+        $this->pmPassword = (string)$pmPassword;
+        $this->alternatePhraseHash = strtoupper(md5((string)$alternatePhraseHash));
+        $this->payeeAccount = (string)$payeeAccount;
     }
 
     /**
