@@ -1,0 +1,3 @@
+vsymfo_payment_perfectmoney_redirect:
+    pattern: /redirect
+    defaults: { _controller: vSymfoPaymentPerfectMoneyBundle:Redirect:redirect }

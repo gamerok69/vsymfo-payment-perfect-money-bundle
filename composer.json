@@ -1,0 +1,26 @@
+{
+    "name": "mikoweb/vsymfo-payment-perfect-money-bundle",
+    "type": "symfony-bundle",
+    "description": "vSymfo Perfect Money Payment Bundle",
+    "keywords": ["payment", "perfect money"],
+    "homepage": "http://vision-web.pl",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rafał Mikołajun",
+            "email": "rafal@vision-web.pl",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "mikoweb/vsymfo-payments": "dev-master",
+        "mikoweb/vsymfo-core": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "vSymfo\\Payment\\PerfectMoneyBundle\\": "" }
+    },
+    "target-dir": "vSymfo/Payment/PerfectMoneyBundle",
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
