@@ -90,7 +90,7 @@ class SciClient
 
         $this->pmMemberId = $pmMemberId;
         $this->pmPassword = $pmPassword;
-        $this->alternatePhraseHash = $alternatePhraseHash;
+        $this->alternatePhraseHash = strtoupper(md5($alternatePhraseHash));
         $this->payeeAccount = $payeeAccount;
     }
 
