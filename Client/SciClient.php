@@ -227,6 +227,6 @@ class SciClient
         // walidacja danych
         $this->paymentValidate($request, $data);
 
-        return array($data);
+        return $data;
     }
 }
