@@ -97,7 +97,7 @@ class PaymentController extends Controller
         $em->persist($transaction);
 
         $payment = $transaction->getPayment();
-        $result = $this->get('payment.plugin_controller')->approveAndDeposit($payment->getId(), (float)$response['Payment_ID']);
+        $result = $this->get('payment.plugin_controller')->approveAndDeposit($payment->getId(), (float)$response['Amount']);
         if (is_object($ex = $result->getPluginException())) {
             throw $ex;
         }
