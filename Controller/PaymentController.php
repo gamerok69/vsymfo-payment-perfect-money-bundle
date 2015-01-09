@@ -72,9 +72,6 @@ class PaymentController extends Controller
      */
     public function callbackAction(Request $request, PaymentInstruction $instruction)
     {
-        $date = new \DateTime();
-        file_put_contents('payment-log.txt', file_get_contents('payment-log.txt') . $date->format('Y-m-d H:i:s') . ": " . json_encode($request->request->all()) . "\n\n");
-
         $client = $this->get('payment.perfectmoney.client');
         $response = $client->getPaymentResponse($request);
 
