@@ -102,7 +102,9 @@ class PerfectMoneyPlugin extends AbstractPlugin
         $instruction = $transaction->getPayment()->getPaymentInstruction();
         $extendedData = $transaction->getExtendedData();
 
-        $actionRequest->setAction(new VisitUrl($this->router->generate('vsymfo_payment_perfectmoney_redirect')));
+        $actionRequest->setAction(new VisitUrl($this->router->generate('vsymfo_payment_perfectmoney_redirect', array(
+            "id" => $instruction->getId()
+        ))));
 
         return $actionRequest;
     }

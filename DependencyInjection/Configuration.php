@@ -59,6 +59,9 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('payee_account')
                     ->isRequired()
                 ->end()
+                ->scalarNode('payee_name')
+                    ->isRequired()
+                ->end()
             ->end()
         ;
 

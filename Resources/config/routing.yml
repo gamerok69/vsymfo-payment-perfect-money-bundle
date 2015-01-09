@@ -1,3 +1,5 @@
 vsymfo_payment_perfectmoney_redirect:
-    pattern: /redirect
+    pattern: /redirect/{id}
     defaults: { _controller: vSymfoPaymentPerfectMoneyBundle:Redirect:redirect }
+    requirements:
+        id: \d+
