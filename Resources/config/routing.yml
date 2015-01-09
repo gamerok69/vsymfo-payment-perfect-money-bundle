@@ -1,5 +1,11 @@
 vsymfo_payment_perfectmoney_redirect:
     pattern: /redirect/{id}
-    defaults: { _controller: vSymfoPaymentPerfectMoneyBundle:Redirect:redirect }
+    defaults: { _controller: vSymfoPaymentPerfectMoneyBundle:Payment:redirect }
+    requirements:
+        id: \d+
+
+vsymfo_payment_perfectmoney_callback:
+    pattern: /transaction/{id}/urlc
+    defaults: { _controller: vSymfoPaymentPerfectMoneyBundle:Payment:callback }
     requirements:
         id: \d+

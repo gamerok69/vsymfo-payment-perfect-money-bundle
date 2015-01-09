@@ -100,7 +100,6 @@ class PerfectMoneyPlugin extends AbstractPlugin
         $actionRequest = new ActionRequiredException('Redirecting to PerfectMoney.');
         $actionRequest->setFinancialTransaction($transaction);
         $instruction = $transaction->getPayment()->getPaymentInstruction();
-        $extendedData = $transaction->getExtendedData();
 
         $actionRequest->setAction(new VisitUrl($this->router->generate('vsymfo_payment_perfectmoney_redirect', array(
             "id" => $instruction->getId()
@@ -118,9 +117,9 @@ class PerfectMoneyPlugin extends AbstractPlugin
      */
     protected function checkExtendedDataBeforeApproveAndDeposit(ExtendedDataInterface $data)
     {
-        /*if (!$data->has('sStatus') || !$data->has('sId') || !$data->has('fAmount')) {
-            throw new BlockedException("Awaiting extended data from EgoPay");
-        }*/
+        if (!$data->has('Payment_ID') || !$data->has('Amount') || !$data->has('Currency') || !$data->has('Type')) {
+            throw new BlockedException("Awaiting extended data from PerfectMoney");
+        }
     }
 
     /**
@@ -128,7 +127,24 @@ class PerfectMoneyPlugin extends AbstractPlugin
      */
     public function approve(FinancialTransactionInterface $transaction, $retry)
     {
+        $data = $transaction->getExtendedData();
+        $this->checkExtendedDataBeforeApproveAndDeposit($data);
 
+        /* Jakaś walidacja tutaj musi być
+        if ($data->get('sStatus') == self::STATUS_COMPLETED
+            || ($data->get('sId') == self::TEST_ID && $data->get('sStatus') == self::STATUS_TEST_SUCCESS)
+        ) {*/
+            $transaction->setReferenceNumber($data->get('Payment_ID'));
+            $transaction->setProcessedAmount($data->get('Amount'));
+            $transaction->setResponseCode(PluginInterface::RESPONSE_CODE_SUCCESS);
+            $transaction->setReasonCode(PluginInterface::REASON_CODE_SUCCESS);
+        /*} else {
+            $e = new FinancialException('Payment status unknow: ' . $data->get('sStatus'));
+            $e->setFinancialTransaction($transaction);
+            $transaction->setResponseCode('Unknown');
+            $transaction->setReasonCode($data->get('sStatus'));
+            throw $e;
+        }*/
     }
 
     /**
@@ -136,6 +152,32 @@ class PerfectMoneyPlugin extends AbstractPlugin
      */
     public function deposit(FinancialTransactionInterface $transaction, $retry)
     {
+        $data = $transaction->getExtendedData();
 
+        if ($transaction->getResponseCode() !== PluginInterface::RESPONSE_CODE_SUCCESS
+            || $transaction->getReasonCode() !== PluginInterface::REASON_CODE_SUCCESS
+        ) {
+            $e = new FinancialException('Peyment is not completed');
+            $e->setFinancialTransaction($transaction);
+            throw $e;
+        }
+
+        // różnica kwoty zatwierdzonej i kwoty wymaganej musi być równa zero
+        // && nazwa waluty musi się zgadzać
+        if (Number::compare($transaction->getProcessedAmount(), $transaction->getRequestedAmount()) === 0
+            && $transaction->getPayment()->getPaymentInstruction()->getCurrency() == $data->get('Currency')
+        ) {
+            // wszystko ok
+            // można zakakceptować zamówienie
+            $event = new PaymentEvent($this->getName(), $transaction, $transaction->getPayment()->getPaymentInstruction());
+            $this->dispatcher->dispatch('deposit', $event);
+        } else {
+            // coś się nie zgadza, nie można tego zakaceptować
+            $e = new FinancialException('The deposit has not passed validation');
+            $e->setFinancialTransaction($transaction);
+            $transaction->setResponseCode('Unknown');
+            $transaction->setReasonCode('UNKNOWN');
+            throw $e;
+        }
     }
 }
