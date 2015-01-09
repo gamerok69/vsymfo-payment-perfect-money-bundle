@@ -195,10 +195,10 @@ class SciClient
             . '&endday=' . $date->format('d')
             . '&endyear=' . $date->format('Y')
             . '&paymentsreceived=1&batchfilter=' . $post->get('PAYMENT_BATCH_NUM'));
-        $lines = explode(PHP_EOL, curl_exec($curl));
+        $lines = preg_split("/\r\n|\n|\r/", curl_exec($curl));
         curl_close($curl);
 
-        if (count($lines) !== 2) {
+        if (count($lines) < 2) {
             throw new InvalidResponseException("Invalid number of rows", 1);
         }
 

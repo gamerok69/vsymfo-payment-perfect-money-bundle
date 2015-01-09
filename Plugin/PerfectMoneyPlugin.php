@@ -34,6 +34,8 @@ use vSymfo\Payment\PerfectMoneyBundle\Client\SciClient;
  */
 class PerfectMoneyPlugin extends AbstractPlugin
 {
+    const TYPE_SUCCESS = 'Income';
+
     /**
      * @var SciClient
      */
@@ -117,7 +119,7 @@ class PerfectMoneyPlugin extends AbstractPlugin
      */
     protected function checkExtendedDataBeforeApproveAndDeposit(ExtendedDataInterface $data)
     {
-        if (!$data->has('Payment_ID') || !$data->has('Amount') || !$data->has('Currency') || !$data->has('Type')) {
+        if (!$data->has('Batch') || !$data->has('Amount') || !$data->has('Currency') || !$data->has('Type')) {
             throw new BlockedException("Awaiting extended data from PerfectMoney");
         }
     }
@@ -130,21 +132,18 @@ class PerfectMoneyPlugin extends AbstractPlugin
         $data = $transaction->getExtendedData();
         $this->checkExtendedDataBeforeApproveAndDeposit($data);
 
-        /* Jakaś walidacja tutaj musi być
-        if ($data->get('sStatus') == self::STATUS_COMPLETED
-            || ($data->get('sId') == self::TEST_ID && $data->get('sStatus') == self::STATUS_TEST_SUCCESS)
-        ) {*/
-            $transaction->setReferenceNumber($data->get('Payment_ID'));
+        if ($data->get('Type') == self::TYPE_SUCCESS) {
+            $transaction->setReferenceNumber($data->get('Batch'));
             $transaction->setProcessedAmount($data->get('Amount'));
             $transaction->setResponseCode(PluginInterface::RESPONSE_CODE_SUCCESS);
             $transaction->setReasonCode(PluginInterface::REASON_CODE_SUCCESS);
-        /*} else {
-            $e = new FinancialException('Payment status unknow: ' . $data->get('sStatus'));
+        } else {
+            $e = new FinancialException('Payment status unknow: ' . $data->get('Type'));
             $e->setFinancialTransaction($transaction);
             $transaction->setResponseCode('Unknown');
-            $transaction->setReasonCode($data->get('sStatus'));
+            $transaction->setReasonCode($data->get('Type'));
             throw $e;
-        }*/
+        }
     }
 
     /**
@@ -176,7 +175,7 @@ class PerfectMoneyPlugin extends AbstractPlugin
             $e = new FinancialException('The deposit has not passed validation');
             $e->setFinancialTransaction($transaction);
             $transaction->setResponseCode('Unknown');
-            $transaction->setReasonCode('UNKNOWN');
+            $transaction->setReasonCode($data->get('Type'));
             throw $e;
         }
     }

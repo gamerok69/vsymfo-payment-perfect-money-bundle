@@ -57,7 +57,7 @@ class PaymentController extends Controller
             "PAYEE_NAME" => $this->container->getParameter('vsymfo_payment_perfectmoney.payee_name'),
             "STATUS_URL" => $this->generateUrl('vsymfo_payment_perfectmoney_callback', array(
                 "id" => $instruction->getId()
-            )),
+            ), true),
         ));
 
         return new Response(ViewUtility::redirectView($html));
