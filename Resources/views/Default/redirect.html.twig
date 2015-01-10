@@ -2,7 +2,7 @@
     <fieldset>
         <input type="hidden" name="PAYEE_ACCOUNT" value="{{ PAYEE_ACCOUNT }}" />
         <input type="hidden" name="PAYEE_NAME" value="{{ PAYEE_NAME }}" />
-        <input type="hidden" name="PAYMENT_AMOUNT" value="{{ PAYMENT_AMOUNT|number_format(2) }}" />
+        <input type="hidden" name="PAYMENT_AMOUNT" value="{{ PAYMENT_AMOUNT|number_format(2, '.', '') }}" />
         <input type="hidden" name="PAYMENT_UNITS" value="{{ PAYMENT_UNITS }}" />
         <input type="hidden" name="PAYMENT_URL" value="{{ PAYMENT_URL }}" />
         <input type="hidden" name="PAYMENT_URL_METHOD" value="LINK" />
