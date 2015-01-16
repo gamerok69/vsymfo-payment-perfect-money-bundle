@@ -30,6 +30,7 @@ class SciClientTest extends \PHPUnit_Framework_TestCase
 
         try { // nie podałem hasha, więc rzuci wyjątek HashNotMatchException
             $sci->getPaymentResponse($request);
+            $this->assertTrue(false);
         } catch (HashNotMatchException $e) {
             $this->assertTrue(true);
         } catch (\Exception $e) {
@@ -41,6 +42,7 @@ class SciClientTest extends \PHPUnit_Framework_TestCase
 
         try { // teraz rzuci, że PayeeAccount się nie zgadza
             $sci->getPaymentResponse($request);
+            $this->assertTrue(false);
         } catch (InvalidPayeeAccountException $e) {
             $this->assertTrue(true);
         } catch (\Exception $e) {
@@ -54,6 +56,7 @@ class SciClientTest extends \PHPUnit_Framework_TestCase
 
         try { // teraz wyjątek ma związek z błędnymi danymi autoryzacyjnymi
             $sci->getPaymentResponse($request);
+            $this->assertTrue(false);
         } catch (InvalidResponseException $e) {
             $this->assertEquals($e->getCode(), 2);
         } catch (\Exception $e) {
