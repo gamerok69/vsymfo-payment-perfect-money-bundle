@@ -218,8 +218,8 @@ class SciClient
             'Currency'      => $row[3],
             'Amount'        => $row[4],
             'Fee'           => $row[5],
-            'Payer_Account' => $row[6],
-            'Payee_Account' => $row[7],
+            'Payer_Account' => $row[7], // w dokumentacji był błąd, Payer_Account jest w kluczu 7
+            'Payee_Account' => $row[6], // w dokumentacji był błąd, Payee_Account jest w kluczu 6
             'Payment_ID'    => $row[8],
             'Memo'          => $row[9],
         );
